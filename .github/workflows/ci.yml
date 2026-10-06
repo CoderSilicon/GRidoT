@@ -1,0 +1,131 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CMAKE_BUILD_PARALLEL_LEVEL: 2
+
+jobs:
+  build:
+    name: Build (${{ matrix.os }}, ${{ matrix.build_type }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, ubuntu-22.04]
+        build_type: [Debug, Release]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential cmake ninja-build pkg-config
+
+      - name: Configure
+        run: |
+          cmake -S . -B build \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DGRIDOT_ENABLE_WERROR=ON
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Smoke test
+        run: |
+          ./build/gridot --help
+          ./build/gridot scan --json | head -c 200
+
+  sanitizers:
+    name: ASan + UBSan
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends build-essential cmake ninja-build
+      - name: Configure
+        run: |
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Debug -DGRIDOT_ENABLE_SANITIZERS=ON -DGRIDOT_ENABLE_WERROR=ON
+      - name: Build
+        run: cmake --build build
+      - name: Run
+        run: ./build/gridot scan --json
+
+  formatting:
+    name: Formatting
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ubuntu-lts/action-clang-format@v20
+        with:
+          clang-format-version: '18'
+      - uses: seanmiddleditch/gha-setup-cmake@v3
+        with:
+          cmake-format-version: '0.6.13'
+      - name: Check clang-format
+        run: |
+          find src -name '*.cpp' -o -name '*.h' | xargs clang-format --dry-run --Werror
+      - name: Check cmake-format
+        run: cmake-format --check CMakeLists.txt cmake/*.cmake
+
+  lint:
+    name: clang-tidy
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install clang-tidy
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends clang-tidy-18
+          sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-18 100
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+      - name: Run clang-tidy
+        run: |
+          for f in $(find src -name '*.cpp'); do
+            clang-tidy "$f" -p build --quiet || exit 1
+          done
+
+  install:
+    name: Install
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y cmake ninja-build g++
+      - name: Configure, build, install
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
+          cmake --build build
+          sudo cmake --install build
+      - name: Verify installed binary and man page
+        run: |
+          command -v gridot
+          test -f /usr/share/man/man1/gridot.1
+          gridot --help
+
+  container:
+    name: Container image
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t gridot:ci .
+      - name: Smoke test image
+        run: docker run --rm gridot:ci --help

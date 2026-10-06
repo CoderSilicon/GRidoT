@@ -1,0 +1,77 @@
+name: Bug report
+
+description: gridot reported something it should not have
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. The most useful bug reports for gridot usually
+        include the `--json` output, because it shows exactly which packages were
+        classified as orphans.
+
+  - type: textarea
+    id: command
+    attributes:
+      label: Command
+      description: The exact gridot command you ran
+      placeholder: gridot scan --min-size 20 --limit 10
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+      description: What you expected gridot to report
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual
+      description: What it reported instead (paste the full output if short)
+    validations:
+      required: true
+
+  - type: textarea
+    id: json
+    attributes:
+      label: gridot scan --json output
+      description: The full JSON output, if you are comfortable sharing it
+      render: text
+
+  - type: input
+    id: distro
+    attributes:
+      label: Distribution
+      description: Output of `cat /etc/os-release`
+      placeholder: Debian GNU/Linux 12 (bookworm)
+    validations:
+      required: true
+
+  - type: input
+    id: dpkg-version
+    attributes:
+      label: dpkg version
+      placeholder: 1.21.22 (Debian 1.21.22)
+    validations:
+      required: true
+
+  - type: textarea
+    id: package-info
+    attributes:
+      label: dpkg-query output for the offending package
+      description: |
+        ```
+        dpkg-query -W -f='${Package} ${Priority} ${Auto-Installed} ${Essential}\n' <package>
+        ```
+
+  - type: checkboxes
+    id: read-only
+    attributes:
+      label: Checks
+      options:
+        - label: I confirmed gridot did not install or remove anything on my system.
+          required: true

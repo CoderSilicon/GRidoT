@@ -1,0 +1,9 @@
+build/
+out/
+.vscode/
+.idea/
+.cache/
+*.o
+*.a
+*.so
+gridot

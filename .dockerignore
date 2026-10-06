@@ -1,0 +1,32 @@
+# Build context
+.git
+.github
+build
+build-*
+out
+.cache
+
+# Editors
+.vscode
+.idea
+.cache
+compile_commands.json
+
+# Docs and metadata not needed inside the image
+docs
+CONTRIBUTING.md
+README.md
+Makefile
+Dockerfile
+.dockerignore
+
+# Runtime state
+data
+.gridot
+
+# Misc
+*.log
+*.o
+*.a
+*.so
+gridot

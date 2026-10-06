@@ -1,0 +1,111 @@
+.TH GRIDOT 1 "2026-10-06" "gridot 0.1.0" "User Commands"
+.SH NAME
+gridot \- get rid of that: report unused Debian/Ubuntu packages
+.SH SYNOPSIS
+.B gridot
+.RI [ scan ]
+.RI [ options ]
+.br
+.B gridot track
+.I name
+.I pkg
+.RI [ pkg ...]
+.br
+.B gridot untrack
+.I name
+.br
+.B gridot groups
+.SH DESCRIPTION
+.B gridot
+reads dpkg/apt package state, builds the dependency graph, and reports packages that
+nothing depends on any more. It never installs or removes anything.
+.PP
+A package is reported as an orphan when it is installed, was auto-installed, is not
+essential and has no priority of
+.I required
+or
+.IR important ,
+is not a member of a tracked group, and is not kept alive by a
+.BR Pre-Depends ,
+.BR Depends ,
+.BR Breaks ,
+.BR Replaces
+or
+.B Recommends
+edge from another installed package.
+.SH COMMANDS
+.TP
+.B scan
+Report orphaned packages grouped by dpkg section. This is the default command.
+.TP
+.BI track " name" " pkg" ...
+Create a tracked group called
+.I name
+containing
+.IR pkg .
+Use
+.B \-g
+to add packages to an existing group instead.
+.TP
+.BI untrack " name"
+Stop tracking the group called
+.IR name .
+.TP
+.B groups
+List tracked groups and their status.
+.SH SCAN OPTIONS
+.TP
+.BI \-m ", " \-\-min\-size " MiB"
+Only report orphans at least this large, in MiB.
+.TP
+.BI \-n ", " \-\-limit " N"
+Show at most
+.I N
+orphans in the detail list.
+.TP
+.BI \-r ", " \-\-root " pkg"
+Treat
+.I pkg
+as a manual root even if it was auto-installed. May be repeated.
+.TP
+.B \-\-json
+Emit machine-readable JSON.
+.TP
+.B \-\-no\-groups
+Skip the tracked-groups section.
+.TP
+.B \-\-no\-recommends
+Ignore
+.B Recommends
+edges. This over-reports, because apt installs recommended packages by default.
+.SH EXIT STATUS
+.TP
+.B 0
+Success.
+.TP
+.B 1
+Runtime error, e.g. dpkg state unavailable or an unreadable group store.
+.TP
+.B 2
+Invalid usage.
+.SH FILES
+.TP
+.I ~/.local/share/gridot/groups
+Tracked-group store, unless
+.B XDG_DATA_HOME
+overrides the base directory.
+.SH EXAMPLES
+.TP
+.B gridot scan \-\-min\-size 20 \-\-limit 10
+Report the ten largest orphans of at least 20 MiB.
+.TP
+.B gridot track audio pulseaudio pipewire
+Track a use case so its parts are reported as AT RISK instead of orphan.
+.SH SEE ALSO
+.BR dpkg (1),
+.BR apt (8),
+.BR apt-mark (8),
+.BR deborphan (1),
+.BR aptitude (1)
+.SH BUGS
+Report issues at https://github.com/gridot/gridot/issues

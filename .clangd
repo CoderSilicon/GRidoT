@@ -1,0 +1,28 @@
+CompileFlags:
+  CompilationDatabase: build
+  Add:
+    - -std=c++20
+    - -Wall
+    - -Wextra
+
+Diagnostics:
+  ClangTidy:
+    Add: [-warnings-as-errors=*]
+    Remove: [-readability-magic-numbers, -cppcoreguidelines-avoid-magic-numbers]
+  Suppress:
+    - unescaped-newline
+    - clang-diagnostic-unused-command-line-argument
+
+InlayHints:
+  ParameterNames: true
+  DeducedTypes: true
+  Designators: true
+  AutoConstraints: false
+  BlockEnd: false
+
+Index:
+  Background: build
+  StandardLibrary: Yes
+
+Style:
+  Standard: c++20

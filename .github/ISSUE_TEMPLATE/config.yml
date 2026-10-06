@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Usage question
+    url: https://github.com/gridot/gridot/discussions/categories/q-a
+    about: How do I use gridot? Ask here instead of opening an issue.
+  - name: dpkg dependency semantics
+    url: https://manpages.debian.org/bookworm/dpkg/dpkg-query.1.en.html
+    about: Field definitions for the records gridot parses from dpkg-query.

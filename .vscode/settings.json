@@ -1,0 +1,37 @@
+{
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.rulers": [100],
+  "files.associations": {
+    "*.h": "cpp",
+    "*.hpp": "cpp",
+    "*.cc": "cpp",
+    "CMakeLists.txt": "cmake",
+    "*.cmake": "cmake",
+    ".clang-format": "yaml",
+    ".clang-tidy": "yaml"
+  },
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.exclude": {
+    "**/build": true,
+    "**/out": true
+  },
+  "search.exclude": {
+    "**/build": true,
+    "**/.cache": true
+  },
+  "cmake.buildDirectory": "${workspaceFolder}/build/debug",
+  "cmake.configureOnOpen": false,
+  "C_Cpp.default.compileCommands": "${workspaceFolder}/build/debug/compile_commands.json",
+  "clangd.arguments": ["--background-index", "--clang-tidy"],
+  "[cmake]": {
+    "editor.defaultFormatter": "nefrob.vscode-cmake-format"
+  },
+  "[markdown]": {
+    "editor.wordWrap": "on",
+    "editor.quickSuggestions": { "other": false, "comments": false, "strings": false }
+  }
+}

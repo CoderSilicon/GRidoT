@@ -1,0 +1,8 @@
+# Optional local overrides for CMake. Never commit this file.
+#
+# e.g.
+#   set(CMAKE_CXX_COMPILER clang++ CACHE FILEPATH "")
+#   set(GRIDOT_ENABLE_SANITIZERS ON CACHE BOOL "")
+
+# Keep in sync with the presets in CMakePresets.json
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE BOOL "" FORCE)
