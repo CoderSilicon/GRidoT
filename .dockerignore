@@ -1,28 +1,24 @@
-# Build context
+# VCS / CI
 .git
 .github
+
+# Build trees
 build
 build-*
 out
 .cache
+compile_commands.json
 
 # Editors
 .vscode
 .idea
-.cache
-compile_commands.json
 
-# Docs and metadata not needed inside the image
-docs
+# Not needed inside the image
 CONTRIBUTING.md
 README.md
 Makefile
 Dockerfile
 .dockerignore
-
-# Runtime state
-data
-.gridot
 
 # Misc
 *.log

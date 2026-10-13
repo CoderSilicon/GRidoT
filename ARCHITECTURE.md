@@ -8,7 +8,7 @@
         ┌───────────┴────────────┐
         ▼                        ▼
 ┌────────────────┐      ┌──────────────────┐
-│  Backend       │      │ GroupStore       │  ~/.local/share/gridot/groups
+│  Backend       │      │ GroupStore       │  ~/.config/gridot/groups.tsv
 │ (interface)    │      │ (groups.cpp)     │
 └───────┬────────┘      └────────┬─────────┘
         │                       │
@@ -54,8 +54,8 @@ a `Recommends` edge really does keep a package installed in practice. Ignoring t
 loudly over-reports, which is why `--no-recommends` is opt-in and documented as such.
 
 **Read-only by construction.** `Backend` exposes no mutating operation, and `gridot` only
-ever shells out to `dpkg-query`. There is no code path that installs or removes anything,
-including the tracked-group store.
+ever shells out to `dpkg-query` and `apt-mark`. There is no code path that installs or
+removes anything, including the tracked-group store.
 
 ## Adding a backend
 

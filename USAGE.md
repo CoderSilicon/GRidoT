@@ -7,7 +7,7 @@ gridot                       # same as `gridot scan`
 gridot scan
 gridot scan -m 50            # only orphans >= 50 MiB
 gridot scan -n 20            # cap the detail list at 20 rows
-gridot scan -r ~/my-script   # treat a manually installed package as a root
+gridot scan -r ffmpeg        # treat a manually installed package as a root
 gridot scan --json           # machine-readable
 gridot scan --no-groups      # skip the tracked-groups section
 ```
@@ -37,8 +37,8 @@ gridot groups
 gridot untrack audio
 ```
 
-Group state lives in `$XDG_DATA_HOME/gridot/groups` (default
-`~/.local/share/gridot/groups`).
+Group state lives in `$XDG_CONFIG_HOME/gridot/groups.tsv` (default
+`~/.config/gridot/groups.tsv`).
 
 Each group reports one of:
 

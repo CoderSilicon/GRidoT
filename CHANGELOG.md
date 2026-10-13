@@ -6,9 +6,26 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
-### Added
+### Fixed
 
-- Nothing yet.
+- Group store path documented as `$XDG_CONFIG_HOME/gridot/groups.tsv` (it was previously
+  described as an `XDG_DATA_HOME` file that the code never wrote).
+- Repository links now all point at `github.com/codersilicon/gridot`.
+- The container runtime stage installs `apt` explicitly instead of relying on the base
+  image providing it; `gridot scan` needs it to read auto-install state.
+- `.clang-format` and `.cmake-format.yaml` were rejected by clang-format 18 and
+  cmake-format 0.6.13, which made the formatting CI job fail; both configs are now valid
+  and the tree is format-clean.
+- The formatting CI job referenced two GitHub Actions that do not exist.
+
+### Changed
+
+- README gained a *Supported distributions* section, with more distributions
+  planned as backends are added.
+- Distro-specific wording dropped from the project tagline (`CMakeLists.txt`,
+  `man/gridot.1`, OCI image label) and from the README feature list.
+- Docker image label now declares `Apache-2.0`, matching `LICENSE`.
+- `CMakePresets.json` gained `relwithdebinfo` and `coverage` build presets.
 
 ## [0.1.0] - 2026-10-06
 
@@ -34,5 +51,5 @@ All notable changes to this project are documented here. The format follows
 - gridot is read-only. It shells out to `dpkg-query` and never installs or removes
   anything.
 
-[Unreleased]: https://github.com/gridot/gridot/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/gridot/gridot/releases/tag/v0.1.0
+[Unreleased]: https://github.com/codersilicon/gridot/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/codersilicon/gridot/releases/tag/v0.1.0

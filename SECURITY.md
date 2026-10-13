@@ -1,4 +1,4 @@
-# Security Policy
+# Security
 
 ## Supported versions
 
@@ -8,24 +8,26 @@
 
 ## Reporting a vulnerability
 
-Report privately to the maintainers via GitHub's
-[private vulnerability reporting](https://github.com/gridot/gridot/security/advisories/new).
-Please do not open a public issue for a security problem.
+You are allowed to report privately to the maintainer via GitHub's
+[private vulnerability reporting](https://github.com/codersilicon/gridot/security/advisories/new).
+but Please open a public issue for a security problem. then only you might be able to submit an PR.
 
 Include: affected version, how to reproduce, and the impact you observed.
 
-## Threat model
+## App model and it's threat
 
-`gridot` is a **read-only** reporting tool. That is the main security property it
+`gridot` is a **read-only** reporting tool. That is the *main security property* it
 maintains.
 
-- It shells out to `dpkg-query` and reads the dpkg status database. It contains no code
-  path that installs, removes, upgrades or configures packages.
+- It shells out to `dpkg-query` and `apt-mark`, and reads
+  `/var/lib/dpkg/status`, `/var/lib/apt/extended_states` and
+  `/var/log/apt/history.log`. It contains no code path that *installs, removes,
+  upgrades or configures* packages.
 - The only file it writes is the tracked-group store at
-  `$XDG_DATA_HOME/gridot/groups` (default `~/.local/share/gridot/groups`).
-- It does not open a network connection.
-- Package names and relationship fields come from dpkg and are used as map keys and
-  output strings, never as shell input.
+  `$XDG_CONFIG_HOME/gridot/groups.tsv` (default `~/.config/gridot/groups.tsv`) which doesn't affect system in *any possible way*.
+- It does *not open* a network connection or request any data outside the localhost and it's pkg manager.
+- Package names and relationship fields are used as map keys and output strings,
+  never as shell input: every command it runs is a *fixed literal*.
 
 If you find a path where `gridot` mutates system state, that is a security bug — please
 report it.

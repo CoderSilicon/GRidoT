@@ -1,16 +1,14 @@
 SHELL := /bin/bash
 .DEFAULT_GOAL := help
 
-BUILD_DIR  ?= build/release
+BUILD_DIR  ?= build
 BUILD_TYPE ?= Release
 PREFIX     ?= /usr/local
 CMAKE      ?= cmake
-CTEST      ?= ctest
 JOBS       ?= $(shell nproc 2>/dev/null || echo 4)
 
-.PHONY: help configure build debug asan coverage test install uninstall \
-        format format-check lint tidy pre-commit clean distclean docker \
-        run run-json
+.PHONY: help configure build debug asan coverage install uninstall \
+        format format-check lint tidy clean distclean docker run run-json
 
 help: ## Show this help
 	@grep -hE '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) \
@@ -23,7 +21,7 @@ configure: ## Configure the release build tree
 build: configure ## Build (parallel)
 	$(CMAKE) --build $(BUILD_DIR) -j $(JOBS)
 
-debug: ## Configure + build a Debug tree with sanitizers off
+debug: ## Configure + build a Debug tree
 	$(CMAKE) -S . -B build/debug -DCMAKE_BUILD_TYPE=Debug
 	$(CMAKE) --build build/debug -j $(JOBS)
 
@@ -36,41 +34,40 @@ coverage: ## Configure + build with coverage instrumentation
 	$(CMAKE) --build build/coverage -j $(JOBS)
 	@$(CMAKE) --build build/coverage --target coverage || true
 
-test: ## Run the test suite (if configured)
-	@if [ -d "$(BUILD_DIR)" ]; then $(CTEST) --test-dir $(BUILD_DIR) --output-on-failure; \
-	 else echo "no build tree; run 'make build' first"; fi
-
 install: build ## Install to $(PREFIX)
 	$(CMAKE) --install $(BUILD_DIR)
 
 uninstall: ## Remove files installed by 'make install'
-	@xargs -a build/release/install_manifest.txt rm -f 2>/dev/null || \
+	@xargs -a $(BUILD_DIR)/install_manifest.txt rm -f 2>/dev/null || \
 		echo "no install manifest found"
 
 format: ## Apply clang-format / cmake-format
-	@command -v clang-format >/dev/null && find src -name '*.cpp' -o -name '*.h' \
-		| xargs -r clang-format -i || echo "clang-format not installed"
-	@command -v cmake-format >/dev/null && cmake-format -i CMakeLists.txt cmake/*.cmake \
-		|| echo "cmake-format not installed"
+	@if command -v clang-format >/dev/null; then \
+		find src \( -name '*.cpp' -o -name '*.h' \) | xargs -r clang-format -i; \
+	else echo "clang-format not installed"; fi
+	@if command -v cmake-format >/dev/null; then \
+		cmake-format -i CMakeLists.txt cmake/*.cmake; \
+	else echo "cmake-format not installed"; fi
 
 format-check: ## Verify formatting without writing files
-	@command -v clang-format >/dev/null && find src -name '*.cpp' -o -name '*.h' \
-		| xargs -r clang-format --dry-run --Werror || echo "clang-format not installed"
-	@command -v cmake-format >/dev/null && cmake-format --check CMakeLists.txt cmake/*.cmake \
-		|| echo "cmake-format not installed"
+	@if command -v clang-format >/dev/null; then \
+		find src \( -name '*.cpp' -o -name '*.h' \) | xargs -r clang-format --dry-run --Werror; \
+	else echo "clang-format not installed"; fi
+	@if command -v cmake-format >/dev/null; then \
+		cmake-format --check CMakeLists.txt cmake/*.cmake; \
+	else echo "cmake-format not installed"; fi
 
-lint: ## Run clang-tidy over the sources
-	@command -v clang-tidy >/dev/null || { echo "clang-tidy not installed"; exit 0; }
-	@for f in $$(find src -name '*.cpp'); do \
-		clang-tidy "$$f" -p build/release --quiet --warnings-as-errors='*' || exit 1; \
+lint: configure ## Run clang-tidy over the sources (warnings are errors)
+	@if ! command -v clang-tidy >/dev/null; then echo "clang-tidy not installed"; exit 0; fi; \
+	for f in $$(find src -name '*.cpp'); do \
+		clang-tidy "$$f" -p $(BUILD_DIR) --quiet --warnings-as-errors='*' || exit 1; \
 	done
 
-tidy: ## Same as lint, but without promoting warnings to errors
-	@command -v clang-tidy >/dev/null || { echo "clang-tidy not installed"; exit 0; }
-	@for f in $$(find src -name '*.cpp'); do clang-tidy "$$f" -p build/release --quiet || exit 1; done
-
-pre-commit: ## Run the git pre-commit hooks on all files
-	@command -v pre-commit >/dev/null && pre-commit run --all-files || echo "pre-commit not installed"
+tidy: configure ## Run clang-tidy without promoting warnings to errors
+	@if ! command -v clang-tidy >/dev/null; then echo "clang-tidy not installed"; exit 0; fi; \
+	for f in $$(find src -name '*.cpp'); do \
+		clang-tidy "$$f" -p $(BUILD_DIR) --quiet || exit 1; \
+	done
 
 run: build ## Run a scan from the build tree
 	$(BUILD_DIR)/gridot scan

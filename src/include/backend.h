@@ -5,7 +5,8 @@
 #include <string>
 #include <vector>
 
-struct Pkg {
+struct Pkg
+{
   std::string name;
   std::string arch;
   std::string version;
@@ -24,7 +25,8 @@ struct Pkg {
   std::string display_size() const;
 };
 
-struct Backend {
+struct Backend
+{
   virtual ~Backend() = default;
 
   virtual std::string name() const = 0;
@@ -36,7 +38,10 @@ struct Backend {
 
   std::map<std::string, std::string> install_origin;
 
-  bool has(const std::string& name) const { return packages.find(name) != packages.end(); }
+  bool has(const std::string& name) const
+  {
+    return packages.find(name) != packages.end();
+  }
   const Pkg* get(const std::string& name) const;
 };
 

@@ -5,15 +5,20 @@ out/
 cmake-build-*/
 _deps/
 CMakeUserPresets.json
+compile_commands.json
+compile_flags.txt
+install_manifest.txt
 CMakeCache.txt
 CMakeFiles/
 cmake_install.cmake
-compile_commands.json
-install_manifest.txt
 CTestTestfile.cmake
 Testing/
-*.sln
-*.vcxproj*
+build.ninja
+rules.ninja
+.ninja_deps
+.ninja_log
+
+# Object / binary artifacts
 *.o
 *.obj
 *.a
@@ -25,44 +30,17 @@ Testing/
 *.exe
 *.gch
 *.pch
-*.gcda
-*.gcno
-*.profraw
-*.profdata
-
-# Ninja / Make artifacts
-.ninja_deps
-.ninja_log
-build.ninja
-rules.ninja
-tags
-TAGS
-cscope.*
-
-# Binaries and packages
+a.out
 /gridot
 /gridot-*
-/vgridot/
-a.out
-
-# Editors / IDEs
-.vscode/*
-!.vscode/settings.json
-.idea/
-.cache/
-.clangd/
-compile_flags.txt
-*.iml
-*.swp
-*.swo
-*~
-.project
-.cproject
-.settings/
 
 # Test / coverage artifacts
 *.gcov
 *.gcov.json
+*.gcda
+*.gcno
+*.profraw
+*.profdata
 coverage/
 coverage-*.html
 coverage-*.info
@@ -70,22 +48,21 @@ lcov.info
 junit-*.xml
 report.xml
 
-# Cache produced by the tracked-groups store
-.gridot/
-*.cache
-*.tmp
+# Editors / IDEs
+.vscode/*
+!.vscode/*.json
+.idea/
+.cache/
+.clangd/
+*.iml
+*.swp
+*.swo
+*~
 
-# Python tooling caches (scripts/, tools/)
-__pycache__/
-*.py[cod]
-.venv/
-venv/
-.mypy_cache/
-.ruff_cache/
-.pytest_cache/
-
-# Docker
-.dockerignore.bak
+# Symbols
+tags
+TAGS
+cscope.*
 
 # Misc
 .DS_Store
@@ -94,3 +71,4 @@ desktop.ini
 .env
 .env.*
 *.log
+*.tmp

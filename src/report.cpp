@@ -184,8 +184,7 @@ std::string render_report(const Backend& backend, const GraphResult& graph, cons
 
   // ---- Full list ------------------------------------------------------------
   o << c(kBold, "  FLAGGED PACKAGES") << " "
-    << c(kDim, "(" + std::to_string(graph.orphans.size()) + " total, largest first smallest last)")
-    << '\n';
+    << c(kDim, "(" + std::to_string(graph.orphans.size()) + " total, largest first)") << '\n';
   o << "  "
     << c(kDim, pad_right("SIZE", 10) + " " + pad_right("PACKAGE", 34) + " " +
                    pad_right("GROUP", 18) + " FROM")

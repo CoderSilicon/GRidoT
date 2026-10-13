@@ -73,15 +73,18 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: ubuntu-lts/action-clang-format@v20
-        with:
-          clang-format-version: '18'
-      - uses: seanmiddleditch/gha-setup-cmake@v3
-        with:
-          cmake-format-version: '0.6.13'
-      - name: Check clang-format
+      - name: Install tools
         run: |
-          find src -name '*.cpp' -o -name '*.h' | xargs clang-format --dry-run --Werror
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends clang-format-18 python3-venv
+          sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-18 100
+      - name: Install cmake-format
+        run: |
+          python3 -m venv "$RUNNER_TEMP/venv"
+          "$RUNNER_TEMP/venv/bin/pip" install 'cmakelang[yaml]==0.6.13'
+          echo "$RUNNER_TEMP/venv/bin" >> "$GITHUB_PATH"
+      - name: Check clang-format
+        run: find src -name '*.cpp' -o -name '*.h' | xargs clang-format --dry-run --Werror
       - name: Check cmake-format
         run: cmake-format --check CMakeLists.txt cmake/*.cmake
 

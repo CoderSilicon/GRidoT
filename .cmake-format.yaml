@@ -1,14 +1,9 @@
 ---
 format:
-  version: '1'
   line_width: 100
   tab_size: 2
-  use_tab: never
-  indent_width: 2
+  line_ending: unix
   max_subgroups_hwrap: 2
-  max_parens_hwrap: 2
-  max_specvar_parens_hwrap: 2
-  separate_lists_with_initial_and_final_newline: true
   enable_sort: true
   autosort:
     groups:
@@ -22,27 +17,3 @@ format:
       - system_includes
       - test
     horizontal_group_order: false
-  dangle:
-    parens: false
-  bin_packing:
-    enabled: false
-  line_ending:
-    unset: LF
-  canonicalize:
-    keys: false
-    booleans: true
-    comments: true
-  comment_width: 80
-  spaces:
-    around_operators:
-      - assignment
-      - generic_ternary_operator
-      - ternary_operator
-    before_other_parameters: true
-    inside_parentheses: false
-    around_separators: true
-  additional_commands: {}
-  custom_command: {}
-  known_wrappers:
-    - find_package
-...

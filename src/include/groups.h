@@ -10,12 +10,14 @@
 // A user-declared use case, e.g. `gridot track sway swaybg waybar`.
 // Members are treated as extra roots so a tracked bundle is never reported
 // as waste. When one member disappears, the rest become "at risk".
-struct Group {
+struct Group
+{
   std::string name;
   std::vector<std::string> members;
 };
 
-struct GroupStore {
+struct GroupStore
+{
   std::vector<Group> groups;
 
   static std::string path();
@@ -31,7 +33,8 @@ struct GroupStore {
   std::set<std::string> names() const;
 };
 
-struct GroupFinding {
+struct GroupFinding
+{
   std::string group;
   std::string member;
   std::string reason;

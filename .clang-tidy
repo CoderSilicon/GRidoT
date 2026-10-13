@@ -44,4 +44,3 @@ CheckOptions:
     value: ''
   - key: performance-unnecessary-value-param.AllowedTypes
     value: ''
-...

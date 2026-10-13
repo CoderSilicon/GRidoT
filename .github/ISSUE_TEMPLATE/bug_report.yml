@@ -65,7 +65,8 @@ body:
       label: dpkg-query output for the offending package
       description: |
         ```
-        dpkg-query -W -f='${Package} ${Priority} ${Auto-Installed} ${Essential}\n' <package>
+        dpkg-query -W -f='${Package} ${Priority} ${Essential} ${Status}\n' <package>
+        grep -A1 '^Package: <package>$' /var/lib/apt/extended_states
         ```
 
   - type: checkboxes

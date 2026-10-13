@@ -72,15 +72,14 @@
     {
       "name": "asan",
       "configurePreset": "asan"
-    }
-  ],
-  "testPresets": [
+    },
     {
-      "name": "debug",
-      "configurePreset": "debug",
-      "output": {
-        "outputOnFailure": true
-      }
+      "name": "relwithdebinfo",
+      "configurePreset": "relwithdebinfo"
+    },
+    {
+      "name": "coverage",
+      "configurePreset": "coverage"
     }
   ]
 }

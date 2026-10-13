@@ -1,6 +1,6 @@
 .TH GRIDOT 1 "2026-10-06" "gridot 0.1.0" "User Commands"
 .SH NAME
-gridot \- get rid of that: report unused Debian/Ubuntu packages
+gridot \- get rid of that: report unused packages
 .SH SYNOPSIS
 .B gridot
 .RI [ scan ]
@@ -90,9 +90,9 @@ Runtime error, e.g. dpkg state unavailable or an unreadable group store.
 Invalid usage.
 .SH FILES
 .TP
-.I ~/.local/share/gridot/groups
+.I ~/.config/gridot/groups.tsv
 Tracked-group store, unless
-.B XDG_DATA_HOME
+.B XDG_CONFIG_HOME
 overrides the base directory.
 .SH EXAMPLES
 .TP
@@ -108,4 +108,4 @@ Track a use case so its parts are reported as AT RISK instead of orphan.
 .BR deborphan (1),
 .BR aptitude (1)
 .SH BUGS
-Report issues at https://github.com/gridot/gridot/issues
+Report issues at https://github.com/codersilicon/gridot/issues

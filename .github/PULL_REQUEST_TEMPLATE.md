@@ -1,44 +1,16 @@
-name: Pull request
+## Summary
 
-description: What this pull request changes
+<!-- One line, imperative, no trailing period. e.g. Add --limit cap to the orphan detail list -->
 
-body:
-  - type: input
-    id: title
-    attributes:
-      label: Summary
-      description: One line, imperative, no trailing period
-      placeholder: Add --limit cap to the orphan detail list
-    validations:
-      required: true
+## Description
 
-  - type: textarea
-    id: description
-    attributes:
-      label: Description
-      description: What changed and why. Link any issue, e.g. Fixes #42.
-    validations:
-      required: true
+<!-- What changed and why. Link any issue, e.g. Fixes #42 -->
 
-  - type: dropdown
-    id: commands
-    attributes:
-      label: Checklist
-      options:
-        - label: make format
-        - label: make lint
-        - label: make debug
-        - label: make asan
-        - label: Tests added or updated
-        - label: Documentation updated (README, docs/, man page)
-        - label: No system state is mutated (still read-only)
+## Checklist
 
-  - type: checkboxes
-    id: scope
-    attributes:
-      label: Scope
-      options:
-        - label: This pull request does not install or remove packages.
-          required: true
-        - label: This pull request adds no new runtime dependency.
-          required: true
+- [ ] `make format` applied
+- [ ] `make lint` clean
+- [ ] `make debug` builds
+- [ ] Documentation updated (README, USAGE, man page)
+- [ ] No new runtime dependency
+- [ ] Still read-only (no installs, no removals)

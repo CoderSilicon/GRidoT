@@ -3,22 +3,19 @@ cmake_minimum_required(VERSION 3.16)
 project(
   gridot
   VERSION 0.1.0
-  DESCRIPTION "Get Rid of That - find Debian/Ubuntu packages you no longer need"
-  HOMEPAGE_URL "https://github.com/gridot/gridot"
-  LANGUAGES CXX
-)
+  DESCRIPTION "Get Rid of That - find packages you no longer need"
+  HOMEPAGE_URL "https://github.com/codersilicon/gridot"
+  LANGUAGES CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(Compiler)
 include(GNUInstallDirs)
-include(CMakeDependentOption)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE
       Release
-      CACHE STRING "Build type" FORCE
-  )
+      CACHE STRING "Build type" FORCE)
 endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -80,10 +77,9 @@ if(GRIDOT_INSTALL)
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/gridotConfig.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/gridotConfig.cmake"
     INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/gridot")
-  install(
-    FILES "${CMAKE_CURRENT_BINARY_DIR}/gridotConfig.cmake"
-          "${CMAKE_CURRENT_BINARY_DIR}/gridotConfigVersion.cmake"
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/gridot")
+  install(FILES "${CMAKE_CURRENT_BINARY_DIR}/gridotConfig.cmake"
+                "${CMAKE_CURRENT_BINARY_DIR}/gridotConfigVersion.cmake"
+          DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/gridot")
 endif()
 
 if(GRIDOT_ENABLE_COVERAGE)

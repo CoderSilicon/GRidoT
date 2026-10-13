@@ -1,8 +1,8 @@
 # Compiler-warning and diagnostics helper.
 #
-# Included from the top-level CMakeLists.txt. Defines an interface target
-# `gridot::warnings` that carries the warning set used for every source file in
-# the project, so flags are configured exactly once.
+# Included from the top-level CMakeLists.txt. Defines an interface target `gridot::warnings` that
+# carries the warning set used for every source file in the project, so flags are configured exactly
+# once.
 
 include_guard(GLOBAL)
 
@@ -18,21 +18,27 @@ if(MSVC)
   if(GRIDOT_ENABLE_WERROR)
     target_compile_options(gridot_warnings INTERFACE /WX)
   endif()
-  target_compile_definitions(gridot_warnings INTERFACE
-    _CRT_SECURE_NO_WARNINGS
-    NOMINMAX
-  )
+  target_compile_definitions(gridot_warnings INTERFACE _CRT_SECURE_NO_WARNINGS NOMINMAX)
 else()
-  target_compile_options(gridot_warnings INTERFACE -Wall -Wextra -Wpedantic -Wnon-virtual-dtor -Wunused
-                                                       -Woverloaded-virtual -Wdouble-promotion -Wformat=2)
+  target_compile_options(
+    gridot_warnings
+    INTERFACE -Wall
+              -Wextra
+              -Wpedantic
+              -Wnon-virtual-dtor
+              -Wunused
+              -Woverloaded-virtual
+              -Wdouble-promotion
+              -Wformat=2)
   if(GRIDOT_ENABLE_WERROR)
     target_compile_options(gridot_warnings INTERFACE -Werror)
   endif()
 endif()
 
 if(GRIDOT_ENABLE_SANITIZERS AND NOT MSVC)
-  target_compile_options(gridot_warnings INTERFACE -fsanitize=address,undefined -fno-omit-frame-pointer
-                                                       -fno-optimize-sibling-calls)
+  target_compile_options(
+    gridot_warnings INTERFACE -fsanitize=address,undefined -fno-omit-frame-pointer
+                              -fno-optimize-sibling-calls)
   target_link_options(gridot_warnings INTERFACE -fsanitize=address,undefined)
 endif()
 
