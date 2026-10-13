@@ -17,6 +17,9 @@ All notable changes to this project are documented here. The format follows
   cmake-format 0.6.13, which made the formatting CI job fail; both configs are now valid
   and the tree is format-clean.
 - The formatting CI job referenced two GitHub Actions that do not exist.
+- The container image build failed on Debian bookworm's gcc 12.2 with a false-positive
+  `-Werror=restrict` reported inside `std::string` concatenation; the diagnostic is now
+  suppressed for GCC < 13 only, leaving gcc 13+ untouched.
 
 ### Changed
 

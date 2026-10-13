@@ -30,6 +30,13 @@ else()
               -Woverloaded-virtual
               -Wdouble-promotion
               -Wformat=2)
+  # gcc 12 false-positives -Wrestrict while inlining std::string concatenation of the form "literal"
+  # + std::to_string(...) -- the report points at char_traits<char>::copy and claims a memcpy of
+  # ~9e18 bytes. It is a compiler bug, and -Werror makes it fatal. gcc 13+ does not emit it, so the
+  # workaround is scoped to GCC < 13.
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 13)
+    target_compile_options(gridot_warnings INTERFACE -Wno-restrict)
+  endif()
   if(GRIDOT_ENABLE_WERROR)
     target_compile_options(gridot_warnings INTERFACE -Werror)
   endif()
