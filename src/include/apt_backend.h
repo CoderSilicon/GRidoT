@@ -10,6 +10,7 @@ public:
     return "apt";
   }
   bool available() const override;
+  std::string removal_hint() const override;
   bool load(std::string& err) override;
 
 private:

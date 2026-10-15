@@ -40,6 +40,11 @@ void Graph::build(const std::map<std::string, Pkg>& packages, bool with_recommen
       if (prov != name)
         providers[prov].insert(name);
     }
+    for (const std::string& fp : p.file_provides)
+    {
+      if (fp != name)
+        providers[fp].insert(name);
+    }
   }
 
   for (const auto& [name, p] : packages)

@@ -17,14 +17,20 @@ gridot scan --no-groups      # skip the tracked-groups section
 A package is reported when **all** of the following hold:
 
 1. It is installed.
-2. It is not `Essential: yes` and its `Priority` is not `required` or `important`.
-3. It was auto-installed (`Auto-Installed: 1`).
-4. No installed package depends on it via `Pre-Depends`, `Depends`, `Breaks`, or
-   `Replaces` — and, unless `--no-recommends` is passed, not via `Recommends` either.
+2. It is not protected: on apt that means not `Essential: yes` and not
+   `Priority: required`/`important`; on dnf/yum that means not `dnf`, not a
+   kernel/installonly package, and not listed in `protected.d`.
+3. It was auto-installed (`Auto-Installed: 1` on apt, install reason
+   `Dependency`/`WeakDependency` on dnf).
+4. No installed package pulls it in. On apt that means `Pre-Depends`, `Depends`
+   or (unless `--no-recommends`) `Recommends`. On dnf/yum that means `Requires`,
+   `Recommends` (unless `--no-recommends`) and file-based requires such as
+   `/usr/bin/gpg2`.
 5. It is not a member of a tracked group.
 
-Because auto-installed packages that nothing needs are exactly the residue of removed
-dependencies, condition 3 keeps your deliberate installs out of the report.
+Because auto-installed packages that nothing needs are exactly the residue of
+removed dependencies, condition 3 keeps your deliberate installs out of the
+report.
 
 ## Tracked groups
 

@@ -1,12 +1,29 @@
 # gridot
 
 [![CI](https://github.com/codersilicon/gridot/actions/workflows/ci.yml/badge.svg)](https://github.com/codersilicon/gridot/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/codersilicon/gridot/actions/workflows/codeql.yml/badge.svg)](https://github.com/codersilicon/gridot/actions/workflows/codeql.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![C++20](https://img.shields.io/badge/C%2B%2B-20-00599C?logo=cplusplus&logoColor=white)](https://isocpp.org/)
+[![CMake](https://img.shields.io/badge/CMake-%E2%89%A5%203.16-064F8C?logo=cmake&logoColor=white)](https://cmake.org/)
+[![Platform](https://img.shields.io/badge/platform-Linux-lightgrey?logo=linux&logoColor=black)](#supported-package-managers)
+[![Docs](https://img.shields.io/badge/docs-man%20page-blue.svg)](#documentation)
 
-**GR**ido**T**: **G**et **R**id of **T**hat — find packages you no longer need.
+**GR**ido**T** — **G**et **R**id **o**f **T**hat.
 
-`gridot` reads your system and reports the packages that are idle and gobbling up your
-space. It never installs or removes anything: it is a reporter, not a package manager.
+Your Linux box quietly fills up with packages that nothing needs anymore. You
+installed a game once, and its libraries are still sitting there — taking space,
+used by nothing, in no menu. `apt autoremove` will delete them for you, but it
+won't say what it took, it won't ask first, and it has no idea that half of your
+"gaming" setup is now hanging by a thread.
+
+`gridot` answers two questions, then stops:
+
+- **What is safe to drop?** — packages that are installed, auto-installed, and
+  no longer pulled in by anything else.
+- **What would I miss?** — for a use case you care about (`gaming`, `audio`,
+  whatever you define), which of its packages are at risk if one member goes away.
+
+It only reads. Nothing is installed, removed or configured.
 
 ```console
 $ gridot scan --min-size 20 --limit 5
@@ -15,8 +32,8 @@ $ gridot scan --min-size 20 --limit 5
 ## Features
 
 - **Orphan detection** — a package is an orphan when no *installed* package pulls it in
-  (respecting `Pre-Depends`, `Depends`, `Breaks`, `Replaces` and — because apt installs
-  `Recommends` by default — `Recommends`).
+  (on apt: `Pre-Depends`, `Depends`, `Recommends`; on dnf: `Requires`, `Recommends` plus
+  file-based requires like `/usr/bin/gpg2`).
 - **Awareness** — `Essential: yes` packages and everything with `Priority: required` or
   `important` are never reported.
 - **Auto-installed packages only** by default, since manual installs are intentional.
@@ -27,19 +44,29 @@ $ gridot scan --min-size 20 --limit 5
 - **Read-only** — it reads your system state and your tracked groups, and never
   installs, removes or configures anything.
 
-## Supported distributions
+## Supported package managers
 
-| Distribution | Status |
+gridot sits on top of a `Backend` that reads the package manager's database —
+the dependency graph, the auto-install flags and (on apt) the install history
+all come from there.
+
+| Package manager | Status |
 | --- | --- |
-| Ubuntu 22.04 LTS, 24.04 LTS | CI builds and runs `gridot scan` on every push |
-| Debian 12 (bookworm) | the container image builds on it |
-| Debian 13 (trixie) | used for day-to-day development |
-| Derivatives — Linux Mint, Pop!_OS, Raspberry Pi OS, Kali | expected to work |
+| apt / dpkg (Debian, Ubuntu) | Supported |
+| dnf / yum / rpm (Fedora, RHEL, CentOS) | Supported(Experimental) |
+| emerge (Gentoo) | Not supported |
+| pacman (Arch) | Not supported |
+| zypper (openSUSE), apk (Alpine), nix | Not supported |
 
-More distributions are on the way. Package reading sits behind a `Backend`
-interface, so another package manager can be added without touching the graph,
-group or reporting layers — see [ARCHITECTURE.md](ARCHITECTURE.md#adding-a-backend).
-Open an issue naming your distribution and we'll prioritise it.
+`Backend` sits between the package manager and the graph, group and reporting
+layers, so another package manager can be added without touching the rest —
+see [ARCHITECTURE.md](ARCHITECTURE.md#adding-a-backend). Open an issue naming
+the package manager you want and we'll prioritise it.
+
+**Works on** Debian and Ubuntu, plus derivatives that share their apt/dpkg
+stack: Linux Mint, Pop!_OS, Raspberry Pi OS and Kali — and on Fedora, RHEL,
+CentOS and their derivatives via dnf/yum. CI builds against Ubuntu 22.04/24.04
+and Fedora; development happens on Debian 13.
 
 ## Build
 

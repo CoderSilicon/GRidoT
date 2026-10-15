@@ -37,6 +37,11 @@ bool AptBackend::available() const
   return util::have_cmd("dpkg-query");
 }
 
+std::string AptBackend::removal_hint() const
+{
+  return "sudo apt autoremove or sudo apt remove <pkg>";
+}
+
 std::vector<std::string> AptBackend::parse_relation(const std::string& raw)
 {
   std::vector<std::string> names;

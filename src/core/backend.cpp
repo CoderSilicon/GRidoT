@@ -1,6 +1,7 @@
 #include "../include/backend.h"
 
 #include "../include/apt_backend.h"
+#include "../include/rpm_backend.h"
 #include "../include/util.h"
 
 std::string Pkg::display_size() const
@@ -16,9 +17,9 @@ const Pkg* Backend::get(const std::string& name) const
 
 std::unique_ptr<Backend> detect_backend()
 {
-  if (util::file_exists("/usr/bin/dpkg-query") || util::file_exists("/bin/dpkg-query"))
-  {
-    return std::make_unique<AptBackend>();
-  }
+  if (auto apt = std::make_unique<AptBackend>(); apt->available())
+    return apt;
+  if (auto rpm = std::make_unique<RpmBackend>(); rpm->available())
+    return rpm;
   return nullptr;
 }

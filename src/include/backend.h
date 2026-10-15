@@ -21,6 +21,7 @@ struct Pkg
   std::vector<std::string> pre_depends;
   std::vector<std::string> recommends;
   std::vector<std::string> provides;
+  std::vector<std::string> file_provides;
 
   std::string display_size() const;
 };
@@ -31,6 +32,7 @@ struct Backend
 
   virtual std::string name() const = 0;
   virtual bool available() const = 0;
+  virtual std::string removal_hint() const = 0;
 
   virtual bool load(std::string& err) = 0;
 

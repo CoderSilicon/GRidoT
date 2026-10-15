@@ -15,7 +15,8 @@ make debug
 - **Read-only.** `gridot` must never install or remove packages. If a change would make it
   mutate system state, it violates the protocol and does not belong here.
 - **No new runtime dependencies** unless there is a strong reason; the tool is meant to
-  work on any Debian/Ubuntu machine that has `dpkg`, `apt` and a C++20 compiler.
+  work on any Debian/Ubuntu/Fedora machine that has the native package manager
+  (`dpkg`/`apt` or `rpm`/`dnf`/`yum`) and a C++20 compiler.
 - **Follow the existing style.** `make format` applies `clang-format` (`.clang-format`,
   Allman braces, 2-space indent) and `cmake-format`. A CI job checks that the tree is clean.
 - **Warnings are errors in CI** (`-DGRIDOT_ENABLE_WERROR=ON`).

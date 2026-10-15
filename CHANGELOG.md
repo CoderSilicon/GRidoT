@@ -6,6 +6,14 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- `RpmBackend`: support for dnf/yum/rpm (Fedora, RHEL, CentOS). `gridot` now detects the
+  package manager automatically (apt first, then dnf/yum) and uses the matching backend.
+  Install reasons come from `dnf repoquery` (or the yumdb as a fallback), file-based
+  requires like `/usr/bin/gpg2` are resolved via each package's file list, and `dnf`,
+  kernel and `protected.d` packages are never reported.
+
 ### Fixed
 
 - Group store path documented as `$XDG_CONFIG_HOME/gridot/groups.tsv` (it was previously
@@ -23,8 +31,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
-- README gained a *Supported distributions* section, with more distributions
-  planned as backends are added.
+- README gained a *Supported package managers* section (apt/dpkg supported,
+  other package managers not yet), with the distros it works on listed below it.
 - Distro-specific wording dropped from the project tagline (`CMakeLists.txt`,
   `man/gridot.1`, OCI image label) and from the README feature list.
 - Docker image label now declares `Apache-2.0`, matching `LICENSE`.

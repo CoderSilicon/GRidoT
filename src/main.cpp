@@ -33,7 +33,7 @@ SCAN OPTIONS:
   -r, --root <pkg>       treat pkg as a manual root (repeatable)
       --json             machine-readable output
       --no-groups        skip the tracked-groups section
-      --no-recommends    ignore Recommends edges (over-reports, apt installs them)
+      --no-recommends    ignore Recommends edges (over-reports; apt/dnf install them)
 
 TRACK OPTIONS:
   gridot track <name> <pkg>...     create a group
@@ -193,7 +193,7 @@ int cmd_scan(const Options& o)
   auto backend = detect_backend();
   if (!backend)
   {
-    std::cerr << "gridot: no supported package manager found (looked for dpkg/apt)\n";
+    std::cerr << "gridot: no supported package manager found (looked for dpkg/apt, rpm/dnf)\n";
     return 2;
   }
   std::string err;

@@ -29,7 +29,8 @@ set(GRIDOT_SOURCES
     src/sections.cpp
     src/report.cpp
     src/core/backend.cpp
-    src/core/apt_backend.cpp)
+    src/core/apt_backend.cpp
+    src/core/rpm_backend.cpp)
 
 set(GRIDOT_HEADERS
     src/include/apt_backend.h
@@ -37,6 +38,7 @@ set(GRIDOT_HEADERS
     src/include/graph.h
     src/include/groups.h
     src/include/report.h
+    src/include/rpm_backend.h
     src/include/sections.h
     src/include/util.h)
 

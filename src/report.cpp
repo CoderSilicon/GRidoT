@@ -155,7 +155,10 @@ std::string render_report(const Backend& backend, const GraphResult& graph, cons
   // ---- Why they are here -----------------------------------------------------
   if (!sec.by_origin.empty())
   {
-    o << c(kBold, "  HISTORY") << " " << c(kDim, "(from apt)") << '\n';
+    o << c(kBold, "  HISTORY");
+    if (!backend.install_origin.empty())
+      o << " " << c(kDim, "(from " + backend.name() + ")");
+    o << '\n';
     size_t shown = 0;
     for (const OriginReport& r : sec.by_origin)
     {
@@ -269,7 +272,7 @@ std::string render_report(const Backend& backend, const GraphResult& graph, cons
     << c(kDim, "This is only a report and maybe wrong, please verify them before proceeding.")
     << '\n';
   o << "  " << c(kDim, "To remove them, review the list first then run:") << " "
-    << c(kCyan, "sudo apt autoremove or sudo apt remove <pkg>") << '\n';
+    << c(kCyan, backend.removal_hint()) << '\n';
   o << '\n';
   return o.str();
 }

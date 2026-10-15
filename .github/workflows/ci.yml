@@ -50,6 +50,38 @@ jobs:
           ./build/gridot --help
           ./build/gridot scan --json | head -c 200
 
+  build-rpm:
+    name: Build (Fedora, ${{ matrix.build_type }})
+    runs-on: ubuntu-24.04
+    container: fedora:44
+    strategy:
+      fail-fast: false
+      matrix:
+        build_type: [Debug, Release]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          dnf install -y --setopt=install_weak_deps=False \
+            gcc-c++ cmake ninja-build pkgconf-pkg-config dnf5-plugins rpm-build
+
+      - name: Configure
+        run: |
+          cmake -S . -B build \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DGRIDOT_ENABLE_WERROR=ON
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Smoke test
+        run: |
+          ./build/gridot --help
+          ./build/gridot scan --json | head -c 200
+
   sanitizers:
     name: ASan + UBSan
     runs-on: ubuntu-24.04
